@@ -325,21 +325,6 @@ async fn resolve_acp_launch_target(
 
     let env = db.get_env(&env_id).await.map_err(|err| err.to_string())?;
     if env.env_type == "wsl" {
-        let configured_wsl_env_id = db
-            .get_setting("acp_wsl_env_id")
-            .await
-            .map_err(|err| err.to_string())?
-            .ok_or(
-                "WSL ACP is not configured. Select one WSL environment in ACP Agent settings first."
-                    .to_string(),
-            )?;
-        if configured_wsl_env_id != env_id {
-            return Err(format!(
-                "WSL ACP is configured for a different environment. Switch ACP Agent settings to use {} before starting this ACP session.",
-                env.name
-            ));
-        }
-
         let distro = env
             .wsl_distro
             .ok_or("WSL distribution not configured".to_string())?;
@@ -349,47 +334,6 @@ async fn resolve_acp_launch_target(
         })
     } else {
         Ok(acp::AcpLaunchTarget::Local)
-    }
-}
-
-#[tauri::command]
-async fn get_acp_wsl_env_id(
-    state: State<'_, Arc<Mutex<AppState>>>,
-) -> Result<Option<String>, String> {
-    let db = {
-        let state = state.lock().await;
-        state.db.clone()
-    };
-
-    db.get_setting("acp_wsl_env_id")
-        .await
-        .map_err(|err| err.to_string())
-}
-
-#[tauri::command]
-async fn set_acp_wsl_env_id(
-    state: State<'_, Arc<Mutex<AppState>>>,
-    env_id: Option<String>,
-) -> Result<(), String> {
-    let db = {
-        let state = state.lock().await;
-        state.db.clone()
-    };
-
-    match env_id {
-        Some(env_id) => {
-            let env = db.get_env(&env_id).await.map_err(|err| err.to_string())?;
-            if env.env_type != "wsl" {
-                return Err("ACP WSL setting must point to a WSL environment".to_string());
-            }
-            db.set_setting("acp_wsl_env_id", &env_id)
-                .await
-                .map_err(|err| err.to_string())
-        }
-        None => db
-            .delete_setting("acp_wsl_env_id")
-            .await
-            .map_err(|err| err.to_string()),
     }
 }
 
@@ -1266,40 +1210,6 @@ async fn refresh_agent_management_cache_on_startup(
         }
     }
 
-    let configured_wsl_env_id = db
-        .get_setting("acp_wsl_env_id")
-        .await
-        .map_err(|e| e.to_string())?;
-    if let Some(env_id) = configured_wsl_env_id {
-        if let Ok(env) = db.get_env(&env_id).await {
-            if env.env_type == "wsl" {
-                if let Some(distro) = env.wsl_distro {
-                    let user = env.wsl_user;
-                    match detect_acp_agents_for_target(
-                        acp_manager,
-                        Some("wsl".to_string()),
-                        Some(distro.clone()),
-                        user,
-                    )
-                    .await
-                    {
-                        Ok(wsl_agents) => {
-                            let scope_key = acp_scope_key("wsl", Some(&distro));
-                            if let Err(err) =
-                                db.upsert_acp_agent_detections(&scope_key, &wsl_agents).await
-                            {
-                                eprintln!("Failed to persist WSL ACP cache for {}: {}", distro, err);
-                            }
-                        }
-                        Err(err) => {
-                            eprintln!("Failed to detect WSL ACP agents for {}: {}", distro, err);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     Ok(())
 }
 
@@ -1837,8 +1747,6 @@ fn main() {
             get_acp_agent_scan_cache,
             refresh_acp_agent_scan_cache,
             refresh_agent_management_cache_on_startup,
-            get_acp_wsl_env_id,
-            set_acp_wsl_env_id,
             create_acp_session,
             send_acp_message,
             respond_acp_permission_request,

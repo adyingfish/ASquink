@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { invoke } from '@tauri-apps/api/core'
 import {
   AppWindow,
@@ -1333,24 +1333,16 @@ function NewSessionModal({
     try {
       let acpPromise: Promise<AcpAgentInfo[]>
       if (selectedEnv?.type === 'wsl') {
-        const acpWslEnvId = await invoke<string | null>('get_acp_wsl_env_id')
-
-        if (!acpWslEnvId) {
-          setAcpNotice('WSL ACP 未配置。请先在环境页面选择一个 WSL 环境。')
-          acpPromise = Promise.resolve([])
-        } else if (acpWslEnvId !== selectedEnv.id) {
-          setAcpNotice(`WSL ACP 当前绑定到其他环境。请在环境页面切换到 ${selectedEnv.name} 后再使用。`)
-          acpPromise = Promise.resolve([])
-        } else {
-          setAcpNotice(`ACP 将在 ${selectedEnv.name}${selectedEnv.wsl_distro ? ` (${selectedEnv.wsl_distro})` : ''} 中启动。`)
-          if (selectedEnv.wsl_distro) {
-            setAcpAgents(buildWslAcpSkeleton(`WSL · ${selectedEnv.wsl_distro}`, selectedEnv.wsl_distro))
-          }
+        setAcpNotice(`ACP 将在 ${selectedEnv.name}${selectedEnv.wsl_distro ? ` (${selectedEnv.wsl_distro})` : ''} 中启动。`)
+        if (selectedEnv.wsl_distro) {
+          setAcpAgents(buildWslAcpSkeleton(`WSL / ${selectedEnv.wsl_distro}`, selectedEnv.wsl_distro))
           acpPromise = invoke<AcpAgentInfo[]>('list_acp_agents', {
             installTarget: 'wsl',
             distro: selectedEnv.wsl_distro,
             user: selectedEnv.wsl_user ?? null,
           })
+        } else {
+          acpPromise = Promise.resolve([])
         }
       } else {
         setAcpNotice(null)
