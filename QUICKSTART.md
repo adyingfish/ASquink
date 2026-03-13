@@ -7,7 +7,7 @@
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 # 安装 Node.js 依赖
-npm install
+pnpm install
 
 # 安装 Tauri CLI
 cargo install tauri-cli
@@ -17,7 +17,7 @@ cargo install tauri-cli
 
 ```bash
 # 启动开发服务器
-npm run tauri:dev
+pnpm run tauri:dev
 ```
 
 ## 配置 API Key
@@ -46,13 +46,13 @@ npm run tauri:dev
 ## 安装 Claude Code（如未安装）
 
 ```bash
-npm install -g @anthropic-ai/claude-code
+pnpm add -g @anthropic-ai/claude-code
 ```
 
 ## 构建发布版本
 
 ```bash
-npm run tauri:build
+pnpm run tauri:build
 ```
 
 构建产物在 `src-tauri/target/release/bundle/`
