@@ -48,7 +48,7 @@
 html, body {
   background: var(--app-bg);
   color: var(--text-primary);
-  font-family: Outfit, 'Segoe UI', sans-serif;
+  font-family: "鸿蒙黑体", "HarmonyOS Sans", "Microsoft YaHei", "Microsoft YaHei UI", "Segoe UI", -apple-system, sans-serif;
   margin: 0;
   padding: 0;
   overflow: hidden;

@@ -154,7 +154,7 @@ export class TerminalController {
     const terminal = new Terminal({
       theme: this.getTerminalTheme(),
       fontSize: 14,
-      fontFamily: '"JetBrains Mono", "Fira Code", "Cascadia Code", monospace',
+      fontFamily: '"Maple Mono Normal NF CN", "Maple Mono Normal", "JetBrains Mono", monospace',
       cursorBlink: true,
       cursorStyle: 'block',
       scrollback: 10000,
