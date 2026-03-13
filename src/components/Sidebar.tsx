@@ -1336,10 +1336,10 @@ function NewSessionModal({
         const acpWslEnvId = await invoke<string | null>('get_acp_wsl_env_id')
 
         if (!acpWslEnvId) {
-          setAcpNotice('WSL ACP 未配置。请先在 ACP Agent 管理页选择一个 WSL 环境。')
+          setAcpNotice('WSL ACP 未配置。请先在环境页面选择一个 WSL 环境。')
           acpPromise = Promise.resolve([])
         } else if (acpWslEnvId !== selectedEnv.id) {
-          setAcpNotice(`WSL ACP 当前绑定到其他环境。请在 ACP Agent 管理页切换到 ${selectedEnv.name} 后再使用。`)
+          setAcpNotice(`WSL ACP 当前绑定到其他环境。请在环境页面切换到 ${selectedEnv.name} 后再使用。`)
           acpPromise = Promise.resolve([])
         } else {
           setAcpNotice(`ACP 将在 ${selectedEnv.name}${selectedEnv.wsl_distro ? ` (${selectedEnv.wsl_distro})` : ''} 中启动。`)
