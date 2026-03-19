@@ -17,6 +17,7 @@ src-tauri/gen/
 *.swo
 
 .claude/
+.codex/
 
 # OS
 .DS_Store
