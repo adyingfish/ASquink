@@ -2,28 +2,35 @@
   "name": "ASquink",
   "version": "0.0.0",
   "description": "AI Agent Terminal Hub - Unified management for Claude Code, Codex, and more",
+  "keywords": [
+    "agent",
+    "ai",
+    "claude",
+    "codex",
+    "terminal"
+  ],
+  "license": "MIT",
+  "author": "",
   "type": "module",
-  "packageManager": "pnpm@10.32.1+sha512.a706938f0e89ac1456b6563eab4edf1d1faf3368d1191fc5c59790e96dc918e4456ab2e67d613de1043d2e8c81f87303e6b40d4ffeca9df15ef1ad567348f2be",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
+    "dev": "vp dev",
+    "build": "tsc && vp build",
+    "preview": "vp preview",
+    "prepare": "vp config",
     "tauri": "tauri",
     "tauri:dev": "tauri dev",
     "tauri:build": "tauri build"
   },
-  "keywords": [
-    "ai",
-    "agent",
-    "terminal",
-    "claude",
-    "codex"
-  ],
-  "author": "",
-  "license": "MIT",
+  "dependencies": {
+    "@tauri-apps/plugin-clipboard-manager": "^2.3.2",
+    "@xterm/addon-fit": "^0.11.0",
+    "@xterm/xterm": "^6.0.0",
+    "lucide-react": "^0.575.0"
+  },
   "devDependencies": {
     "@tauri-apps/api": "^2.10.1",
     "@tauri-apps/cli": "^2.10.0",
+    "@types/node": "^25.5.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.0",
@@ -34,12 +41,14 @@
     "sharp": "^0.34.5",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.9.3",
-    "vite": "^8.0.0"
+    "vite": "npm:@voidzero-dev/vite-plus-core@latest",
+    "vite-plus": "latest"
   },
-  "dependencies": {
-    "@tauri-apps/plugin-clipboard-manager": "^2.3.2",
-    "@xterm/addon-fit": "^0.11.0",
-    "@xterm/xterm": "^6.0.0",
-    "lucide-react": "^0.575.0"
+  "packageManager": "pnpm@10.32.1+sha512.a706938f0e89ac1456b6563eab4edf1d1faf3368d1191fc5c59790e96dc918e4456ab2e67d613de1043d2e8c81f87303e6b40d4ffeca9df15ef1ad567348f2be",
+  "pnpm": {
+    "overrides": {
+      "vite": "npm:@voidzero-dev/vite-plus-core@latest",
+      "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
+    }
   }
 }
